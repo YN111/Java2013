@@ -1,0 +1,129 @@
+public class Vehicle {
+	static final String TURN_LEFT = "left";
+	static final String TURN_RIGHT = "right";
+	private static final int TURN_LEFT_ANGLE = 270; // 左折時の回転角度
+	private static final int TURN_RIGHT_ANGLE = 90; // 右折時の回転角度
+	private static int nextId = 0;
+	private int id;
+	private double speed;
+	private double direction;
+	private String name;
+
+	/**
+	 * 引数なしコンストラクタ
+	 */
+	Vehicle() {
+		id = nextId++;
+	}
+
+	/**
+	 * 名前を設定するコンストラクタ
+	 */
+	Vehicle(String name) {
+		id = nextId++;
+		this.name = name;
+	}
+
+	/**
+	 * スピードのセッタ
+	 */
+	public void setSpeed(double speed) {
+		if (speed >= 0) {
+			this.speed = speed;
+		}
+	}
+
+	/**
+	 * 方向のセッタ
+	 */
+	public void setDirection(double direction) {
+		if (direction >= 0 && direction <= 360) {
+			this.direction = direction;
+		}
+	}
+
+	/**
+	 * 名前のセッタ
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * IDを返す
+	 */
+	public int getId() {
+		return id;
+	}
+
+	/**
+	 * スピードを返す
+	 */
+	public double getSpeed() {
+		return speed;
+	}
+
+	/**
+	 * 方向を返す
+	 */
+	public double getDirection() {
+		return direction;
+	}
+
+	/**
+	 * 名前を返す
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * 今まで使われたIDの最大値を返す
+	 */
+	public int getMaxId() {
+		return nextId - 1;
+	}
+
+	/**
+	 * スピードを変更する
+	 */
+	public void changeSpeed(double speed) {
+		this.speed = speed;
+	}
+
+	/**
+	 * スピードをリセット（停止）する
+	 */
+	public void stop() {
+		speed = 0;
+	}
+
+	/**
+	 * 角度を指定し方向転換する
+	 */
+	public void turn(double angle) {
+		setDirection((getDirection() + angle) % 360);
+	}
+
+	/**
+	 * TURN_LEFT または TURN_RIGHT を指定し方向転換する
+	 */
+	public void turn(String angle) {
+		if (angle.equals("left")) {
+			setDirection((getDirection() + TURN_LEFT_ANGLE) % 360);
+		} else if (angle.equals("right")) {
+			setDirection((getDirection() + TURN_RIGHT_ANGLE) % 360);
+		} else {
+			return;
+		}
+	}
+
+	/**
+	 * 情報を出力する
+	 */
+	public String toString() {
+		String info = "VEHICLE INFO: ID=" + id + ", SPEED=" + speed + ", DIRECTION="
+				+ direction + ", NAME=" + name;
+		return info;
+	}
+}

@@ -1,0 +1,23 @@
+﻿===== POSITIVE POSITIVE =====
+Infinity + Infinity = Infinity
+Infinity - Infinity = NaN
+Infinity * Infinity = Infinity
+Infinity / Infinity = NaN
+
+===== POSITIVE NEGATIVE =====
+Infinity + -Infinity = NaN
+Infinity - -Infinity = Infinity
+Infinity * -Infinity = -Infinity
+Infinity / -Infinity = NaN
+
+===== NEGATIVE POSITIVE =====
+-Infinity + Infinity = NaN
+-Infinity - Infinity = -Infinity
+-Infinity * Infinity = -Infinity
+-Infinity / Infinity = NaN
+
+===== NEGATIVE NEGATIVE =====
+-Infinity + -Infinity = -Infinity
+-Infinity - -Infinity = NaN
+-Infinity * -Infinity = Infinity
+-Infinity / -Infinity = NaN

@@ -1,0 +1,21 @@
+ex01_02
+
+HelloWorldのコードを一部変更して発生したエラーの内容。
+
+(1)
+【変更内容】
+public static void main → public void mainに書き換え
+
+【結果】
+コンパイルは通るが、実行時にエラーが発生する。
+エラー内容は、「Selection does not contain a main type」である。
+つまり、public void main は mainメソッドとして認識されていない。
+
+
+(2)
+【変更内容】
+行末のセミコロンをコロンに書き換え
+
+【結果】
+コンパイルエラーが発生する。
+エラー内容は、「Syntax error on token ":", ; expected」である。

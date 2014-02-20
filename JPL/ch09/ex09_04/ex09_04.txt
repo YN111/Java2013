@@ -1,0 +1,71 @@
+3 << 2L - 1
+【答】int型, 6
+【理由】シフトと加法は加法の方が優先順位が高い
+　　　　2L - 1は、オペランドの一方がlong型のため、結果はlong型（=1L）
+　　　　3 << 1Lについて、シフト演算子の結果は左辺のオペランドの型のためint型（=6）
+
+(3L << 2) - 1L
+【答】long型, 11L
+【理由】かっこがついている式が先に計算される
+　　　　3L << 2はについて、シフト演算子の結果は左辺のオペランドの型のためlong型（=12L）
+　　　　12L - 1は、オペランドの一方がlong型のため、結果はlong型（=11L）
+
+10 < 12 == 6 > 17
+【答】boolean型, false
+【理由】関係演算子は等値よりも優先順位が高い
+　　　　==の左側はfalse、右側はtrue
+　　　　false != true のため、最終的な結果はfalse
+
+10 << 12 == 6 >> 17
+【答】boolean型, false
+【理由】シフト演算子は等値よりも優先順位が高い
+　　　　==の左側は値が10以上のint型、右側は0
+　　　　左辺 != 右辺 のため、最終的な結果はfalse
+
+13.5e-1 % Float.POSITIVE_INFINITY
+【答】double型, 13.5e-1
+【理由】オペランドがdoubleとfloatのため、結果はdouble型
+　　　　a < b のとき a % b = a となるため、結果は13.5e-1
+
+Float.POSITIVE_INFINITY + Double.NEGATIVE_INFINITY
+【答】double型, NaN
+【理由】オペランドがdoubleとfloatのため、結果はdouble型
+　　　　+∞ + -∞ のため、結果はNaN
+
+Double.POSITIVE_INFINITY - Float.NEGATIVE_INFINITY：
+【答】double型, Infinity
+【理由】オペランドがdoubleとfloatのため、結果はdouble型
+　　　　+∞ - -∞ のため、結果は +∞
+
+0.0 / -0.0 == -0.0 / 0.0
+【答】boolean型, false
+【理由】double型で 0.0 / 0.0 = NaNとなる（左辺も右辺もNaN）
+　　　　NaN == NaN は常にfalse
+
+Integer.MAX_VALUE + Integer.MIN_VALUE
+【答】int型, -1
+【理由】Integer.MIN_VALUE の絶対値は Integer.MAX_VALUE よりも1大きいため
+
+
+Long.MAX_VALUE + 5
+【答】long型, Long.MIN_VALUE + 4L
+【理由】整数算術は2の補数によるモジュロ算術のため、Long.MAX_VALUE + 1 = Long.MIN_VALUE となるから
+
+(short) 5 * (byte) 10
+【答】int型, 50
+【理由】byte, shortの整数算術はintに格上げされて行われるため
+
+i < 15 ? 1.72e3f : 0（i = 3）
+【答】float型, 1.72e3f
+【理由】i < 15 = true のため、：の左側の値となる
+
+i++ + i++ + --i （i = 3）
+【答】int型, 11
+【理由】以下の式と同じになるため
+　　　　score = i;  (このとき i = 3）
+　　　　i = i + 1;
+　　　　score += i;（このとき i = 4)
+　　　　i = i + 1;
+　　　　i = i - 1;
+　　　　score += i;（このとき i = 4）
+　　　　
