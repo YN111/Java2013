@@ -36,6 +36,7 @@ public class InterpretUtil {
 	 */
 	public static Object createNewObject(Constructor<?> con, String args, ObjectHolder holder)
 			throws Throwable {
+		con.setAccessible(true);
 		Type[] paramTypes = con.getParameterTypes();
 		if (paramTypes.length == 0 && args.length() != 0) {
 			throw new UserInputException("引数の数が不正なためオブジェクト生成を中止しました");
@@ -191,6 +192,7 @@ public class InterpretUtil {
 	 */
 	public static Object invokeMethod(Method m, Object obj, String args, ObjectHolder holder)
 			throws Throwable {
+		m.setAccessible(true);
 		Type[] paramTypes = m.getGenericParameterTypes();
 		if (paramTypes.length == 0 && args.length() != 0) {
 			throw new UserInputException("引数の数が不正なためメソッド呼び出しを中止しました");
@@ -434,7 +436,12 @@ public class InterpretUtil {
 			} else if (type.equals(Long.class) || type.equals(long.class)
 					|| type.equals(Long[].class) || type.equals(long[].class)
 					|| type.equals(Long[][].class) || type.equals(long[][].class)) {
-				return Long.valueOf(value);
+				if (value.charAt(value.length() - 1) == 'l'
+						|| value.charAt(value.length() - 1) == 'L') {
+					return Long.valueOf(value.substring(0, value.length() - 1));
+				} else {
+					return Long.valueOf(value);
+				}
 
 			} else if (type.equals(Double.class) || type.equals(double.class)
 					|| type.equals(Double[].class) || type.equals(double[].class)
@@ -444,21 +451,59 @@ public class InterpretUtil {
 			} else if (type.equals(Float.class) || type.equals(float.class)
 					|| type.equals(Float[].class) || type.equals(float[].class)
 					|| type.equals(Float[][].class) || type.equals(float[][].class)) {
-				return Float.valueOf(value);
+				if (value.charAt(value.length() - 1) == 'f'
+						|| value.charAt(value.length() - 1) == 'F') {
+					return Float.valueOf(value.substring(0, value.length() - 1));
+				} else {
+					return Float.valueOf(value);
+				}
 
-				// String型の場合
 			} else if (type.equals(String.class) || type.equals(String[].class)
 					|| type.equals(String[][].class)) {
 				return convertString(value);
 
 			} else {
+				// Object型等の場合は引数の形式で返す方を判別する
+				if (value.equals("true")) {
+					return true;
+				} else if (value.equals("false")) {
+					return false;
+				} else if ((value.charAt(0) == '\'') && (value.charAt(value.length() - 1) == '\'')) {
+					return convertCharacter(value);
+				} else if ((value.charAt(0) == '\"') && (value.charAt(value.length() - 1) == '\"')) {
+					return convertString(value);
+				} else if ((value.charAt(value.length() - 1)) == 'l'
+						|| (value.charAt(value.length() - 1)) == 'L') {
+					return Long.valueOf(value.substring(0, value.length() - 1));
+				} else if ((value.charAt(value.length() - 1)) == 'f'
+						|| (value.charAt(value.length() - 1)) == 'F') {
+					return Float.valueOf(value.substring(0, value.length() - 1));
+				}
+
+				try {
+					int ret = Integer.parseInt(value);
+					return ret;
+				} catch (NumberFormatException e) {
+				}
+
+				try {
+					double ret = Double.parseDouble(value);
+					return ret;
+				} catch (NumberFormatException e) {
+				}
+
 				return value;
 			}
 		}
 
 		// 参照型の場合（既に保持されているオブジェクトから指定された場合）
 		else {
-			return holder.getObject(value);
+			Object obj = holder.getObject(value);
+			if (obj != null) {
+				return obj;
+			} else {
+				throw new UserInputException("指定されたオブジェクトは存在しません");
+			}
 		}
 	}
 

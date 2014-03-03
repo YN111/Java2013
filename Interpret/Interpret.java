@@ -182,6 +182,7 @@ public class Interpret extends JFrame implements MouseListener {
 		mBtnConstructor.addMouseListener(this);
 		mBtnArrayCreation.addMouseListener(this);
 		mListViewObject.addMouseListener(this);
+		mListViewField.addMouseListener(this);
 		mBtnField.addMouseListener(this);
 		mBtnMethod.addMouseListener(this);
 		mListViewArray.addMouseListener(this);
@@ -801,6 +802,32 @@ public class Interpret extends JFrame implements MouseListener {
 			}
 		}
 
+		// フィールドのリスト
+		if (event.getSource() == mListViewField) {
+			if (event.getClickCount() == 2) { // ダブルクリック
+				int index = mListViewField.getSelectedIndex();
+				if (index < 0) {
+					return;
+				}
+
+				mFields[index].setAccessible(true);
+				try {
+					Object targetObj = mFields[index].get(mTargetObject);
+					if (targetObj == null) {
+						return;
+					}
+
+					// オブジェクトの更新
+					String key = keepObject(targetObj);
+					updateTargetObject(targetObj, key);
+					DialogUtil.showItemKeepingDialog(this, "読み出し時のキーは  【" + key + "】 です");
+
+				} catch (Exception e) {
+					DialogUtil.showExceptionDialog(this, e.toString());
+				}
+			}
+		}
+
 		// フィールド書き換えボタン
 		if (event.getSource() == mBtnField) {
 			int fieldIndex = mListViewField.getSelectedIndex();
@@ -888,7 +915,7 @@ public class Interpret extends JFrame implements MouseListener {
 					// オブジェクトの更新
 					String key = keepObject(targetObj);
 					updateTargetObject(targetObj, key);
-					DialogUtil.showArrayItemKeepingDialog(this, "読み出し時のキーは  【" + key + "】 です");
+					DialogUtil.showItemKeepingDialog(this, "読み出し時のキーは  【" + key + "】 です");
 
 				} catch (Exception e) {
 					DialogUtil.showExceptionDialog(this, e.toString());

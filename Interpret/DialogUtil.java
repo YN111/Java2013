@@ -196,10 +196,10 @@ public class DialogUtil {
 	}
 	
 	/**
-	 * 配列要素の保持に成功したときに表示するダイアログを表示します
+	 * 要素の保持に成功したときに表示するダイアログを表示します
 	 * @param msg 表示するメッセージ
 	 */
-	public static void showArrayItemKeepingDialog(Component parent, String msg) {
+	public static void showItemKeepingDialog(Component parent, String msg) {
 		JTextArea txtArea = new JTextArea();
 		txtArea.setText(msg);
 		txtArea.setLineWrap(true);
