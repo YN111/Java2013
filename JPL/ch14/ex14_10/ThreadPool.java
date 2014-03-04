@@ -42,7 +42,6 @@ public class ThreadPool {
 		if (queueSize < 1 || numberOfThreads < 1) {
 			throw new IllegalArgumentException();
 		}
-
 		mThreads = new Thread[numberOfThreads];
 		mQueue = new LinkedList<Runnable>();
 		mQueueSize = queueSize;
@@ -68,7 +67,9 @@ public class ThreadPool {
 						synchronized (ThreadPool.this) {
 							while (mQueue.isEmpty()) {
 								try {
-									ThreadPool.this.wait();
+									if (mState == MyState.RUN) {
+										ThreadPool.this.wait();
+									}
 									if (mState == MyState.STOP && mQueue.isEmpty()) {
 										return;
 									}
@@ -99,7 +100,6 @@ public class ThreadPool {
 		if (mState != MyState.RUN) {
 			throw new IllegalStateException();
 		}
-
 		mState = MyState.STOP;
 
 		synchronized (this) {
@@ -108,15 +108,10 @@ public class ThreadPool {
 
 		for (Thread t : mThreads) {
 			// wait for thread terminations
-			while (t.isAlive()) {
-				try {
-					Thread.sleep(100);
-					synchronized (this) {
-						notifyAll();
-					}
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+			try {
+				t.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 	}
@@ -140,15 +135,11 @@ public class ThreadPool {
 			throw new IllegalStateException();
 		}
 
-		while (true) {
-			if (mQueue.size() > mQueueSize) {
-				try {
-					wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			} else {
-				break;
+		while (mQueue.size() > mQueueSize) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 
