@@ -537,10 +537,9 @@ public class Interpret extends JFrame implements MouseListener {
 
 		// オブジェクト名を表示
 		if (key == null) {
-			mLabelTargetObject.setText(mTargetObject.getClass().getSimpleName());
+			mLabelTargetObject.setText(mTargetObject.getClass().getName());
 		} else {
-			mLabelTargetObject
-					.setText("【" + key + "】  " + mTargetObject.getClass().getSimpleName());
+			mLabelTargetObject.setText("【" + key + "】  " + mTargetObject.getClass().getName());
 		}
 
 		// フィールドを取得して表示
@@ -574,19 +573,30 @@ public class Interpret extends JFrame implements MouseListener {
 	private void updateTargetArray(Object arr, String key, int index) {
 		mTargetArray = arr;
 		int dimension = InterpretUtil.getArrayDimension(mTargetArray);
-		String clsName = mTargetArray.getClass().getSimpleName();
+		String clsName;
+		if (InterpretUtil.isPrimitiveArray(arr)) {
+			clsName = mTargetArray.getClass().getSimpleName();
+		} else {
+			clsName = mTargetArray.getClass().getName();
+		}
 
 		if (Array.getLength(mTargetArray) > 0) {
 			// ターゲットオブジェクトの更新
 			// 1次元配列の場合
 			if (dimension == 1) {
 				mTargetObject = Array.get(mTargetArray, index);
-				String viewClsName = clsName.substring(0, clsName.length() - 1);
+				String viewClsName;
+				if (InterpretUtil.isPrimitiveArray(arr)) {
+					viewClsName = clsName.substring(0, clsName.length() - 2);
+				} else {
+					viewClsName = clsName + " ";
+				}
+
 				// オブジェクト名を表示
 				if (key == null) {
-					mLabelTargetObject.setText(viewClsName + index + "]");
+					mLabelTargetObject.setText(viewClsName + "[" + index + "]");
 				} else {
-					mLabelTargetObject.setText("【" + key + "】  " + viewClsName + index + "]");
+					mLabelTargetObject.setText("【" + key + "】  " + viewClsName + "[" + index + "]");
 				}
 			}
 
@@ -596,14 +606,20 @@ public class Interpret extends JFrame implements MouseListener {
 					int firstIndex = index / Array.getLength(Array.get(mTargetArray, 0));
 					int secondIndex = index % Array.getLength(Array.get(mTargetArray, 0));
 					mTargetObject = Array.get(Array.get(mTargetArray, firstIndex), secondIndex);
-					String viewClsName = clsName.substring(0, clsName.length() - 3);
+					String viewClsName;
+					if (InterpretUtil.isPrimitiveArray(arr)) {
+						viewClsName = clsName.substring(0, clsName.length() - 4);
+					} else {
+						viewClsName = clsName + " ";
+					}
+
 					// オブジェクト名を表示
 					if (key == null) {
-						mLabelTargetObject.setText(viewClsName + firstIndex + "][" + secondIndex
-								+ "]");
+						mLabelTargetObject.setText(viewClsName + "[" + firstIndex + "]["
+								+ secondIndex + "]");
 					} else {
-						mLabelTargetObject.setText("【" + key + "】  " + viewClsName + firstIndex
-								+ "][" + secondIndex + "]");
+						mLabelTargetObject.setText("【" + key + "】  " + viewClsName + "["
+								+ firstIndex + "][" + secondIndex + "]");
 					}
 				} else {
 					// 内側の配列の要素数が0
@@ -816,10 +832,8 @@ public class Interpret extends JFrame implements MouseListener {
 					if (targetObj == null) {
 						return;
 					}
-
-					// オブジェクトの更新
+					// オブジェクトの保持
 					String key = keepObject(targetObj);
-					updateTargetObject(targetObj, key);
 					DialogUtil.showItemKeepingDialog(this, "読み出し時のキーは  【" + key + "】 です");
 
 				} catch (Exception e) {
@@ -905,16 +919,14 @@ public class Interpret extends JFrame implements MouseListener {
 						int innerArrSize = Array.getLength(Array.get(mTargetArray, 0));
 						targetObj = Array.get((Array.get(mTargetArray, index / innerArrSize)),
 								index % innerArrSize);
-						System.out.println(targetObj);
 					}
 
 					if (targetObj == null) {
 						return;
 					}
 
-					// オブジェクトの更新
+					// オブジェクトの保持
 					String key = keepObject(targetObj);
-					updateTargetObject(targetObj, key);
 					DialogUtil.showItemKeepingDialog(this, "読み出し時のキーは  【" + key + "】 です");
 
 				} catch (Exception e) {

@@ -7,6 +7,7 @@ public class PlayerLoader extends ClassLoader {
 	 * @param name
 	 * @return
 	 */
+	@Override
 	public Class<?> findClass(String name) throws ClassNotFoundException {
 		byte[] buf;
 		try {
@@ -15,7 +16,6 @@ public class PlayerLoader extends ClassLoader {
 		} catch (IOException e) {
 			throw new ClassNotFoundException(e.toString());
 		}
-
 	}
 
 	/**

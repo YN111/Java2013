@@ -30,6 +30,46 @@ public class ThreadPool {
 	private Thread[] mThreads;
 
 	/**
+	 * Worker Thread class
+	 */
+	private class WorkerThread extends Thread {
+
+		/**
+		 * Execute Runnable objects which is included in the queue.
+		 * If the queue is empty, then this method invocation will be blocked
+		 * until the queue is not empty.
+		 * When notified that state has become STOP, this method will finish 
+		 * after Runnable object's terminations.
+		 */
+		@Override
+		public void run() {
+			while (true) {
+				Runnable r;
+				synchronized (ThreadPool.this) {
+					while (mQueue.isEmpty()) {
+						if (mState == MyState.RUN) {
+							try {
+								ThreadPool.this.wait();
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+						if (mState == MyState.STOP && mQueue.isEmpty()) {
+							return;
+						}
+					}
+					r = mQueue.remove();
+					ThreadPool.this.notifyAll();
+				}
+				r.run();
+				if (mState == MyState.STOP) {
+					return;
+				}
+			}
+		}
+	}
+
+	/**
 	 * Constructs ThreadPool.
 	 *
 	 * @param queueSize the max size of queue
@@ -59,34 +99,7 @@ public class ThreadPool {
 		mState = MyState.RUN;
 
 		for (int i = 0; i < mThreads.length; i++) {
-			mThreads[i] = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					while (true) {
-						Runnable r;
-						synchronized (ThreadPool.this) {
-							while (mQueue.isEmpty()) {
-								try {
-									if (mState == MyState.RUN) {
-										ThreadPool.this.wait();
-									}
-									if (mState == MyState.STOP && mQueue.isEmpty()) {
-										return;
-									}
-								} catch (InterruptedException e) {
-									e.printStackTrace();
-								}
-							}
-							r = mQueue.remove();
-							ThreadPool.this.notifyAll();
-						}
-						r.run();
-						if (mState == MyState.STOP) {
-							return;
-						}
-					}
-				}
-			});
+			mThreads[i] = new WorkerThread();
 			mThreads[i].start();
 		}
 	}
