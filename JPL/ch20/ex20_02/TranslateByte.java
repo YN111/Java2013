@@ -6,10 +6,10 @@ public class TranslateByte extends FilterInputStream {
 	private byte to;
 
 	/**
-	 * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	 * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 	 * @param is
-	 * @param from •ÏŠ·Œ³
-	 * @param to •ÏŠ·æ
+	 * @param from å¤‰æ›å…ƒ
+	 * @param to å¤‰æ›å…ˆ
 	 */
 	TranslateByte(InputStream is, byte from, byte to) {
 		super(is);

@@ -9,8 +9,8 @@ public class EncryptOutputStream extends FilterOutputStream {
 	}
 
 	/**
-	 * ƒoƒCƒg‚ğˆÃ†‰»‚µ‚Ä‘‚«‚İ‚Ü‚·<br>
-	 * •œ†‰»‚É‚ÍDecryptInputStreamƒNƒ‰ƒX‚Ìreadƒƒ\ƒbƒh‚ğg—p‚µ‚Ü‚·
+	 * ãƒã‚¤ãƒˆã‚’æš—å·åŒ–ã—ã¦æ›¸ãè¾¼ã¿ã¾ã™<br>
+	 * å¾©å·åŒ–ã«ã¯DecryptInputStreamã‚¯ãƒ©ã‚¹ã®readãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä½¿ç”¨ã—ã¾ã™
 	 */
 	@Override
 	public void write(int b) throws IOException {
@@ -18,8 +18,8 @@ public class EncryptOutputStream extends FilterOutputStream {
 	}
 
 	/**
-	 * ƒoƒCƒg—ñ‚ğˆÃ†‰»‚µ‚Ä‘‚«‚İ‚Ü‚·<br>
-	 * •œ†‰»‚É‚ÍDecryptInputStreamƒNƒ‰ƒX‚Ìreadƒƒ\ƒbƒh‚ğg—p‚µ‚Ü‚·
+	 * ãƒã‚¤ãƒˆåˆ—ã‚’æš—å·åŒ–ã—ã¦æ›¸ãè¾¼ã¿ã¾ã™<br>
+	 * å¾©å·åŒ–ã«ã¯DecryptInputStreamã‚¯ãƒ©ã‚¹ã®readãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä½¿ç”¨ã—ã¾ã™
 	 */
 	@Override
 	public void write(byte[] bytes) throws IOException {
@@ -29,8 +29,8 @@ public class EncryptOutputStream extends FilterOutputStream {
 	}
 
 	/**
-	 * ƒoƒCƒg—ñ‚Ìw’è‚³‚ê‚½”ÍˆÍ‚ğˆÃ†‰»‚µ‚Ä‘‚«‚İ‚Ü‚·<br>
-	 * •œ†‰»‚É‚ÍDecryptInputStreamƒNƒ‰ƒX‚Ìreadƒƒ\ƒbƒh‚ğg—p‚µ‚Ü‚·
+	 * ãƒã‚¤ãƒˆåˆ—ã®æŒ‡å®šã•ã‚ŒãŸç¯„å›²ã‚’æš—å·åŒ–ã—ã¦æ›¸ãè¾¼ã¿ã¾ã™<br>
+	 * å¾©å·åŒ–ã«ã¯DecryptInputStreamã‚¯ãƒ©ã‚¹ã®readãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä½¿ç”¨ã—ã¾ã™
 	 */
 	@Override
 	public void write(byte[] bytes, int off, int len) throws IOException {

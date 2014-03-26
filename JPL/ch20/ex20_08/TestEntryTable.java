@@ -20,11 +20,11 @@ public class TestEntryTable extends TestCase {
 
 	@Before
 	public void setUp() {
-		// printlnƒƒ\ƒbƒh‚Ìo—Íæ‚ğbaos‚Éİ’è
+		// printlnãƒ¡ã‚½ãƒƒãƒ‰ã®å‡ºåŠ›å…ˆã‚’baosã«è¨­å®š
 		baos = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(new BufferedOutputStream(baos)));
 
-		// ƒeƒXƒg—p‚Ìƒtƒ@ƒCƒ‹‚ğì¬
+		// ãƒ†ã‚¹ãƒˆç”¨ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆ
 		FileWriter fw;
 		try {
 			fw = new FileWriter(PATH);

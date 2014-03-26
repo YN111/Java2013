@@ -27,7 +27,7 @@ public class TranslateByte {
 			InputStream fileIs = new FileInputStream("test.txt");
 			OutputStream fileOs = new FileOutputStream("test_out.txt");
 			translate(fileIs, fileOs, from, to);
-			// ‘‚«‚ß‚½‚©’²‚×‚é
+			// æ›¸ãè¾¼ã‚ãŸã‹èª¿ã¹ã‚‹
 			FileReader fReader = new FileReader("test_out.txt");
 			int ch;
 			while ((ch = fReader.read()) != -1) {

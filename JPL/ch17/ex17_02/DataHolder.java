@@ -8,7 +8,7 @@ public class DataHolder {
 	byte[] readFile(File file) {
 		byte[] data;
 
-		// ƒf[ƒ^‚ğ‹L‰¯‚µ‚Ä‚¢‚é‚©’²‚×‚é
+		// ãƒ‡ãƒ¼ã‚¿ã‚’è¨˜æ†¶ã—ã¦ã„ã‚‹ã‹èª¿ã¹ã‚‹
 		if (lastFile != null && file.equals(lastFile.get())) {
 			data = lastData.get();
 			if (data != null) {
@@ -16,7 +16,7 @@ public class DataHolder {
 			}
 		}
 
-		// ‹L‰¯‚µ‚Ä‚¢‚È‚¢‚Ì‚Å“Ç‚İ‚Ş
+		// è¨˜æ†¶ã—ã¦ã„ãªã„ã®ã§èª­ã¿è¾¼ã‚€
 		data = readByteFromFile(file);
 		lastFile = new WeakReference<File>(file);
 		lastData = new WeakReference<byte[]>(data);
@@ -24,7 +24,7 @@ public class DataHolder {
 	}
 
 	/**
-	 * ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İAƒoƒCƒg”z—ñ‚ğ•Ô‚µ‚Ü‚·
+	 * ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿ã€ãƒã‚¤ãƒˆé…åˆ—ã‚’è¿”ã—ã¾ã™
 	 * @param file
 	 * @return
 	 */

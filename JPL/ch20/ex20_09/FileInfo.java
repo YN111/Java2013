@@ -3,7 +3,7 @@ import java.io.*;
 public class FileInfo {
 
 	/**
-	 * �����œn���ꂽ�p�X���\���t�@�C�������S�Ă̏���\�����܂�
+	 * 引数で渡されたパスが表すファイルが持つ全ての情報を表示します
 	 * @param path
 	 * @param pathList
 	 */

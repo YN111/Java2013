@@ -7,7 +7,7 @@ import java.io.IOException;
 public class MemoryChecker {
 
 	/**
-	 * —˜—p‰Â”\‚Èƒƒ‚ƒŠ—Ê‚ğ’²‚×‚Ü‚·
+	 * åˆ©ç”¨å¯èƒ½ãªãƒ¡ãƒ¢ãƒªé‡ã‚’èª¿ã¹ã¾ã™
 	 */
 	public static void checkMemory() {
 		Runtime rt = Runtime.getRuntime();
@@ -17,7 +17,7 @@ public class MemoryChecker {
 	}
 
 	/**
-	 * ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İAƒoƒCƒg”z—ñ‚ğ•Ô‚µ‚Ü‚·
+	 * ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿ã€ãƒã‚¤ãƒˆé…åˆ—ã‚’è¿”ã—ã¾ã™
 	 * @param file
 	 * @return
 	 */
@@ -47,18 +47,18 @@ public class MemoryChecker {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("===== ‹N“® =====================");
+		System.out.println("===== èµ·å‹•æ™‚ =====================");
 		checkMemory();
 		System.out.println("=================================");
 		System.out.println();
 
-		// —e—Ê‚Ì‘å‚«‚¢ƒtƒ@ƒCƒ‹‚ğƒoƒCƒg”z—ñ‚É“Ç‚İ‚Ş
+		// å®¹é‡ã®å¤§ãã„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒã‚¤ãƒˆé…åˆ—ã«èª­ã¿è¾¼ã‚€
 		File file = new File("picture.jpg");
 
 		@SuppressWarnings("unused")
 		byte[] b = readByteFromFile(file);
 
-		System.out.println("===== ƒIƒuƒWƒFƒNƒg¶¬Œã =============");
+		System.out.println("===== ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆå¾Œ =============");
 		checkMemory();
 		System.out.println("=================================");
 		System.out.println();
@@ -66,7 +66,7 @@ public class MemoryChecker {
 		b = null;
 		Runtime.getRuntime().gc();
 
-		System.out.println("===== GCŒã =======================");
+		System.out.println("===== GCå¾Œ =======================");
 		checkMemory();
 		System.out.println("=================================");
 		System.out.println();

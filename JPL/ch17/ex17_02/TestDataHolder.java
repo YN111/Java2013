@@ -41,7 +41,7 @@ public class TestDataHolder extends TestCase {
 		b = dh.readFile(new File("test1.txt"));
 		assertEquals(new String(b), "test1");
 
-		Runtime.getRuntime().gc(); // ã‚¢QÆ‚Í‚±‚±‚Å‰ñû‚³‚ê‚é
+		Runtime.getRuntime().gc(); // å¼±ã„å‚ç…§ã¯ã“ã“ã§å›åã•ã‚Œã‚‹
 		wr = getLastFileReference(dh);
 		assertEquals(wr.get(), null);
 		b = dh.readFile(new File("test1.txt"));

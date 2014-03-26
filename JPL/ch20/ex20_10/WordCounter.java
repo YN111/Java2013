@@ -5,7 +5,7 @@ import java.util.Map;
 public class WordCounter {
 
 	/**
-	 * “ü—Íƒtƒ@ƒCƒ‹‚ğ’PŒê‚É•ª‰ğ‚µ‚ÄA‚»‚Ìƒtƒ@ƒCƒ‹“à‚ÅŠe’PŒê‚ÌoŒ»”‚ğ”‚¦‚Ä•\¦‚µ‚Ü‚·
+	 * å…¥åŠ›ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å˜èªã«åˆ†è§£ã—ã¦ã€ãã®ãƒ•ã‚¡ã‚¤ãƒ«å†…ã§å„å˜èªã®å‡ºç¾æ•°ã‚’æ•°ãˆã¦è¡¨ç¤ºã—ã¾ã™
 	 * @param filePath
 	 */
 	public static void showCountResult(String filePath) {
@@ -21,9 +21,9 @@ public class WordCounter {
 	}
 
 	/**
-	 * w’è‚³‚ê‚½Reader‚ÉŠÜ‚Ü‚ê‚é’PŒê‚Ì”‚ğƒJƒEƒ“ƒg‚µAƒ}ƒbƒv‚Æ‚µ‚Ä•Ô‚µ‚Ü‚·<br>
+	 * æŒ‡å®šã•ã‚ŒãŸReaderã«å«ã¾ã‚Œã‚‹å˜èªã®æ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆã—ã€ãƒãƒƒãƒ—ã¨ã—ã¦è¿”ã—ã¾ã™<br>
 	 * @param source
-	 * @return MapFkey‚ª’PŒêAvalue‚ªoŒ»”‚Å‚·
+	 * @return Mapï¼škeyãŒå˜èªã€valueãŒå‡ºç¾æ•°ã§ã™
 	 */
 	private static Map<String, Integer> count(Reader source) {
 		Map<String, Integer> countMap = new HashMap<String, Integer>();

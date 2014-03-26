@@ -3,10 +3,10 @@ import java.io.*;
 public class FindWord {
 	
 	/**
-	 * �w�肳�ꂽ�t�@�C����ǂݍ���Ŏw�肳�ꂽ�P����������܂�<br>
-	 * �P�ꂪ�������ꂽ���ׂĂ̍s���A�s�̑O�ɍs�ԍ������ĕ\�����܂�
-	 * @param filePath �P�ꌟ�����s���t�@�C���̃t�@�C���p�X
-	 * @param match �����Ώۂ̒P��
+	 * 指定されたファイルを読み込んで指定された単語を検索します<br>
+	 * 単語が発見されたすべての行を、行の前に行番号をつけて表示します
+	 * @param filePath 単語検索を行うファイルのファイルパス
+	 * @param match 検索対象の単語
 	 * @throws IOException
 	 */
 	public static void findAndPrint(String filePath, String match) throws IOException {

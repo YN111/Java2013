@@ -12,7 +12,7 @@ public class LineFilterReader extends FilterReader {
 	}
 
 	/**
-	 * 1s•ª‚Ì•¶š—ñ‚ğ“Ç‚İ‚ñ‚Å”z—ñ‚Æ‚µ‚Ä•Ô‚µ‚Ü‚·
+	 * 1è¡Œåˆ†ã®æ–‡å­—åˆ—ã‚’èª­ã¿è¾¼ã‚“ã§é…åˆ—ã¨ã—ã¦è¿”ã—ã¾ã™
 	 * @return
 	 * @throws IOException
 	 */
@@ -23,7 +23,7 @@ public class LineFilterReader extends FilterReader {
 		while ((i = read()) != -1 && i != '\n' && i != '\r') {
 			list.add(i);
 		}
-		super.skip(CRLF.length() - 1); // Ÿ‚Éread()‚ªŒÄ‚Î‚ê‚½‚Æ‚«‚É‰üsŒã‚ÌÅ‰‚Ì•¶š‚ğ“Ç‚İæ‚ê‚é‚æ‚¤‚É‚·‚é
+		super.skip(CRLF.length() - 1); // æ¬¡ã«read()ãŒå‘¼ã°ã‚ŒãŸã¨ãã«æ”¹è¡Œå¾Œã®æœ€åˆã®æ–‡å­—ã‚’èª­ã¿å–ã‚Œã‚‹ã‚ˆã†ã«ã™ã‚‹
 		int[] line = new int[list.size()];
 		for (int j = 0; j < line.length; j++) {
 			line[j] = list.get(j);

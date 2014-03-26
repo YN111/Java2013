@@ -13,11 +13,11 @@ public class TestFindWord extends TestCase {
 
 	@Before
 	public void setUp() {
-		// printlnƒƒ\ƒbƒh‚Ìo—Íæ‚ğbaos‚Éİ’è
+		// printlnãƒ¡ã‚½ãƒƒãƒ‰ã®å‡ºåŠ›å…ˆã‚’baosã«è¨­å®š
 		baos = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(new BufferedOutputStream(baos)));
 
-		// ƒeƒXƒg—p‚ÌƒeƒLƒXƒgƒtƒ@ƒCƒ‹‚ğì¬‚·‚é
+		// ãƒ†ã‚¹ãƒˆç”¨ã®ãƒ†ã‚­ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã™ã‚‹
 		try {
 			FileWriter fr = new FileWriter(FILE_PATH);
 			fr.write(SAMPLE_TEXT);

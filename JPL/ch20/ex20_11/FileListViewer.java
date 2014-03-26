@@ -3,7 +3,7 @@ import java.io.File;
 public class FileListViewer {
 
 	/**
-	 * �w�肳�ꂽ�f�B���N�g������w�肳�ꂽ�ڔ�������t�@�C����\�����܂�
+	 * 指定されたディレクトリから指定された接尾語を持つファイルを表示します
 	 * @param dir
 	 * @param suffix
 	 */

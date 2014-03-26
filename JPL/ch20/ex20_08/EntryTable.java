@@ -5,8 +5,8 @@ import java.util.Random;
 public class EntryTable {
 
 	/**
-	 * %%‚Ån‚Ü‚és‚Å•ªŠ„‚³‚ê‚Ä‚¢‚éƒGƒ“ƒgƒŠ[‚ğ‚Âƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚±‚İ<br>
-	 * ŠeƒGƒ“ƒgƒŠ[‚ğƒ‰ƒ“ƒ_ƒ€‚Éo—Í‚µ‚Ü‚·
+	 * %%ã§å§‹ã¾ã‚‹è¡Œã§åˆ†å‰²ã•ã‚Œã¦ã„ã‚‹ã‚¨ãƒ³ãƒˆãƒªãƒ¼ã‚’æŒã¤ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿ã“ã¿<br>
+	 * å„ã‚¨ãƒ³ãƒˆãƒªãƒ¼ã‚’ãƒ©ãƒ³ãƒ€ãƒ ã«å‡ºåŠ›ã—ã¾ã™
 	 * @param path
 	 * @throws IOException 
 	 */
@@ -23,7 +23,7 @@ public class EntryTable {
 	}
 
 	/**
-	 * %%‚Å•ªŠ„‚³‚ê‚Ä‚¢‚éƒtƒ@ƒCƒ‹‚ÌŠeƒGƒ“ƒgƒŠ‚ÌŠJnˆÊ’u‚ğ‚Âƒe[ƒuƒ‹‚ğì¬‚µ‚Ü‚·
+	 * %%ã§åˆ†å‰²ã•ã‚Œã¦ã„ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã®å„ã‚¨ãƒ³ãƒˆãƒªã®é–‹å§‹ä½ç½®ã‚’æŒã¤ãƒ†ãƒ¼ãƒ–ãƒ«ã‚’ä½œæˆã—ã¾ã™
 	 * @param raf
 	 */
 	private static ArrayList<Long> createTable(RandomAccessFile raf) {
@@ -32,13 +32,13 @@ public class EntryTable {
 		try {
 			String line;
 			while ((line = raf.readLine()) != null) {
-				if (!line.startsWith("%%")) { // %%‚Ån‚Ü‚ç‚È‚¢s‚ÍÁ‚·
+				if (!line.startsWith("%%")) { // %%ã§å§‹ã¾ã‚‰ãªã„è¡Œã¯æ¶ˆã™
 					table.remove(table.size() - 1);
 				}
 				table.add(raf.getFilePointer());
 			}
 		} catch (EOFException e) {
-			// “Ç‚İ‚İI—¹
+			// èª­ã¿è¾¼ã¿çµ‚äº†
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

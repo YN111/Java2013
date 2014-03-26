@@ -12,7 +12,7 @@ public class TestNameOpValueTokenizer extends TestCase {
 
 	@Before
 	public void setUp() {
-		// printlnƒƒ\ƒbƒh‚Ìo—Íæ‚ğbaos‚Éİ’è
+		// printlnãƒ¡ã‚½ãƒƒãƒ‰ã®å‡ºåŠ›å…ˆã‚’baosã«è¨­å®š
 		baos = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(new BufferedOutputStream(baos)));
 	}

@@ -14,15 +14,15 @@ public class TestFileInfo extends TestCase {
 
 	@Before
 	public void setUp() {
-		// printlnƒƒ\ƒbƒh‚Ìo—Íæ‚ğbaos‚Éİ’è
+		// printlnãƒ¡ã‚½ãƒƒãƒ‰ã®å‡ºåŠ›å…ˆã‚’baosã«è¨­å®š
 		baos = new ByteArrayOutputStream();
 		System.setOut(new PrintStream(new BufferedOutputStream(baos)));
 
-		// ƒeƒXƒg—p‚Ìƒtƒ@ƒCƒ‹‚ğì¬
+		// ãƒ†ã‚¹ãƒˆç”¨ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆ
 		writeTestFile(PATH1);
 		writeTestFile(PATH2);
 
-		// ƒeƒXƒg—pƒtƒ@ƒCƒ‹‚Ìİ’è‚ğ•ÏX
+		// ãƒ†ã‚¹ãƒˆç”¨ãƒ•ã‚¡ã‚¤ãƒ«ã®è¨­å®šã‚’å¤‰æ›´
 		File file = new File(PATH1);
 		file.setLastModified(20140324230000L);
 	}

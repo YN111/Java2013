@@ -14,18 +14,18 @@ public class Attr {
 	}
 
 	/**
-	 * ƒRƒ“ƒXƒgƒ‰ƒNƒ^<br>
-	 * DataInputStream‚©‚çó‘Ô‚ğ“Ç‚İ‚İ‚Ü‚·
+	 * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿<br>
+	 * DataInputStreamã‹ã‚‰çŠ¶æ…‹ã‚’èª­ã¿è¾¼ã¿ã¾ã™
 	 * @param dis
 	 */
 	public Attr(DataInputStream dis) {
 		String name = null;
 
 		try {
-			// name‚Ìİ’è
+			// nameã®è¨­å®š
 			name = dis.readUTF();
 
-			// value‚Ìİ’è
+			// valueã®è¨­å®š
 			byte[] valueByte = new byte[dis.readInt()];
 			dis.read(valueByte);
 			ByteArrayInputStream bais = new ByteArrayInputStream(valueByte);
@@ -60,15 +60,15 @@ public class Attr {
 	}
 
 	/**
-	 * ˆø”‚Éw’è‚³‚ê‚½DataOutputStream‚ÉƒIƒuƒWƒFƒNƒg‚Ì“à—e‚ğ‘‚«‚İ‚Ü‚·
+	 * å¼•æ•°ã«æŒ‡å®šã•ã‚ŒãŸDataOutputStreamã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å†…å®¹ã‚’æ›¸ãè¾¼ã¿ã¾ã™
 	 * @param dos
 	 */
 	public void getStream(DataOutputStream dos) {
 		try {
-			// name‚ğ‘‚«‚İ
+			// nameã‚’æ›¸ãè¾¼ã¿
 			dos.writeUTF(name);
 
-			// value‚ğƒoƒCƒg—ñ‚É•ÏŠ·‚µ‚Ä‘‚«‚İ
+			// valueã‚’ãƒã‚¤ãƒˆåˆ—ã«å¤‰æ›ã—ã¦æ›¸ãè¾¼ã¿
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ObjectOutputStream oos = new ObjectOutputStream(baos);
 			oos.writeObject(value);
@@ -76,7 +76,7 @@ public class Attr {
 			baos.close();
 			byte[] valueByte = baos.toByteArray();
 			int valueByteSize = valueByte.length;
-			dos.writeInt(valueByteSize); // ƒoƒCƒg”z—ñ‚ÌƒTƒCƒY
+			dos.writeInt(valueByteSize); // ãƒã‚¤ãƒˆé…åˆ—ã®ã‚µã‚¤ã‚º
 			dos.write(valueByte);
 
 		} catch (IOException e) {

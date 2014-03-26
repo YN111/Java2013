@@ -12,7 +12,7 @@ public class NameOpValueTokenizer {
 	private enum Name {
 		FIRST, SECOND, THIRD;
 
-		// ŒvZŒ‹‰Ê
+		// è¨ˆç®—çµæœ
 		double score = 0.0;
 
 		void calc(Op op, double value) {
@@ -38,26 +38,26 @@ public class NameOpValueTokenizer {
 	private Op selectOp;
 
 	/**
-	 * "name op value"Œ`®‚Ì“ü—Í‚ğˆ—‚·‚éƒƒ\ƒbƒh‚Å‚·<br>
+	 * "name op value"å½¢å¼ã®å…¥åŠ›ã‚’å‡¦ç†ã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã§ã™<br>
 	 * <br>
-	 * "name" ‚ÍŒvZ‘ÎÛ‚Ì’PŒê‚Å‚·B"first", "second" ‚Ü‚½‚Í "third" ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢<br>
-	 * "op" ‚Í‰‰Zq‚Å‚·B'+', '-' ‚Ü‚½‚Í '=' ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢<br>
-	 * "value" ‚ÍŒvZ‚·‚é’l‚Å‚·B”’l‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢<br>
+	 * "name" ã¯è¨ˆç®—å¯¾è±¡ã®å˜èªã§ã™ã€‚"first", "second" ã¾ãŸã¯ "third" ã‚’æŒ‡å®šã—ã¦ãã ã•ã„<br>
+	 * "op" ã¯æ¼”ç®—å­ã§ã™ã€‚'+', '-' ã¾ãŸã¯ '=' ã‚’æŒ‡å®šã—ã¦ãã ã•ã„<br>
+	 * "value" ã¯è¨ˆç®—ã™ã‚‹å€¤ã§ã™ã€‚æ•°å€¤ã‚’æŒ‡å®šã—ã¦ãã ã•ã„<br>
 	 * <br>
-	 * ‚·‚×‚Ä‚ÌŒvZ‚ğI—¹‚·‚é‚ÆŒ‹‰Ê‚ğo—Í‚µ‚Ü‚·
+	 * ã™ã¹ã¦ã®è¨ˆç®—ã‚’çµ‚äº†ã™ã‚‹ã¨çµæœã‚’å‡ºåŠ›ã—ã¾ã™
 	 * @param source
 	 */
 	public void calc(Reader source) {
 		StreamTokenizer in = new StreamTokenizer(source);
-		// '+'‚Æ'='‚ğ’PŒê•¶š‚Æ‚·‚é
-		// '-'‚Íop‚Å‚Í’PŒê•¶šAvalue‚Å‚Í”’l‚Æ‚È‚é‚½‚ßwhile•¶“à‚Å—p“r‚É‰‚¶‚Äİ’è‚·‚é
+		// '+'ã¨'='ã‚’å˜èªæ–‡å­—ã¨ã™ã‚‹
+		// '-'ã¯opã§ã¯å˜èªæ–‡å­—ã€valueã§ã¯æ•°å€¤ã¨ãªã‚‹ãŸã‚whileæ–‡å†…ã§ç”¨é€”ã«å¿œã˜ã¦è¨­å®šã™ã‚‹
 		in.wordChars('+', '+');
 		in.wordChars('=', '=');
 
 		int type;
 		try {
 			while ((type = in.nextToken()) != StreamTokenizer.TT_EOF) {
-				// name‚ğƒ`ƒFƒbƒN‚·‚é
+				// nameã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
 				if (FIRST.equals(in.sval)) {
 					selectName = Name.FIRST;
 				} else if (SECOND.equals(in.sval)) {
@@ -66,11 +66,11 @@ public class NameOpValueTokenizer {
 					selectName = Name.THIRD;
 				} else {
 					throw new IllegalArgumentException(
-							"name ‚Í \"first\", \"second\", \"third\" ‚Ì‚¢‚¸‚ê‚©‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢");
+							"name ã¯ \"first\", \"second\", \"third\" ã®ã„ãšã‚Œã‹ã‚’æŒ‡å®šã—ã¦ãã ã•ã„");
 				}
 
-				// op‚ğƒ`ƒFƒbƒN‚·‚é
-				in.ordinaryChar('-'); // '-'‚ğ’PŒê•¶š‚Æ‚·‚é
+				// opã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
+				in.ordinaryChar('-'); // '-'ã‚’å˜èªæ–‡å­—ã¨ã™ã‚‹
 				in.wordChars('-', '-');
 				type = in.nextToken();
 
@@ -81,17 +81,17 @@ public class NameOpValueTokenizer {
 				} else if (EQUAL.equals(in.sval)) {
 					selectOp = Op.EQUAL;
 				} else {
-					throw new IllegalArgumentException("op ‚Í \'+\', \'-\', \'=\' ‚Ì‚¢‚¸‚ê‚©‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢");
+					throw new IllegalArgumentException("op ã¯ \'+\', \'-\', \'=\' ã®ã„ãšã‚Œã‹ã‚’æŒ‡å®šã—ã¦ãã ã•ã„");
 				}
 
-				// value‚ğƒ`ƒFƒbƒN‚·‚é
-				in.parseNumbers(); // '-'‚ğ”’l‚Æ‚·‚é
+				// valueã‚’ãƒã‚§ãƒƒã‚¯ã™ã‚‹
+				in.parseNumbers(); // '-'ã‚’æ•°å€¤ã¨ã™ã‚‹
 				type = in.nextToken();
 				if (type != StreamTokenizer.TT_NUMBER) {
-					throw new IllegalArgumentException("value‚Í”’l‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢");
+					throw new IllegalArgumentException("valueã¯æ•°å€¤ã‚’æŒ‡å®šã—ã¦ãã ã•ã„");
 				}
 
-				// ŒvZÀs
+				// è¨ˆç®—å®Ÿè¡Œ
 				selectName.calc(selectOp, in.nval);
 			}
 
