@@ -4,7 +4,7 @@ import org.junit.Before;
 
 import junit.framework.TestCase;
 
-public class FindWordTest extends TestCase {
+public class TestFindWord extends TestCase {
 
 	private static final String FILE_PATH = "test.txt";
 	private static final String SAMPLE_TEXT = "This is a sample text.\nsearch word is TEST.\nThis is a sample text.\nsearch word is TEST.\nThis is a sample text.";

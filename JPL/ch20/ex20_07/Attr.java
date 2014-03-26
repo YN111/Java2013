@@ -23,9 +23,7 @@ public class Attr {
 
 		try {
 			// nameの設定
-			byte[] nameByte = new byte[dis.readInt()];
-			dis.read(nameByte);
-			name = new String(nameByte);
+			name = dis.readUTF();
 
 			// valueの設定
 			byte[] valueByte = new byte[dis.readInt()];
@@ -67,11 +65,8 @@ public class Attr {
 	 */
 	public void getStream(DataOutputStream dos) {
 		try {
-			// nameをバイト列に変換して書き込み
-			byte[] nameByte = name.getBytes();
-			int nameByteSize = nameByte.length;
-			dos.writeInt(nameByteSize); // バイト配列のサイズ
-			dos.writeBytes(name);
+			// nameを書き込み
+			dos.writeUTF(name);
 
 			// valueをバイト列に変換して書き込み
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
