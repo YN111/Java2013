@@ -4,19 +4,33 @@ import java.util.Map;
 
 public final class ResourceManager {
 
+	enum State {
+		INITIAL, RUN, SHUTDOWN;
+	}
+
 	final ReferenceQueue<Object> queue;
 	final Map<Reference<?>, Resource> refs;
 	final Thread reaper;
 	boolean shutdown = false;
+	private State state = State.INITIAL;
 
 	public ResourceManager() {
 		queue = new ReferenceQueue<Object>();
 		refs = new HashMap<Reference<?>, Resource>();
 		reaper = new ReaperThread();
 		reaper.start();
+		state = State.RUN;
 
 		// リソースの初期化
 		
+	}
+
+	/**
+	 * 現在の状態を返します
+	 * @return
+	 */
+	public State getState() {
+		return state;
 	}
 
 	/**
@@ -25,7 +39,6 @@ public final class ResourceManager {
 	public synchronized void shutdown() {
 		if (!shutdown) {
 			shutdown = true;
-			reaper.interrupt();
 		}
 	}
 
@@ -60,8 +73,14 @@ public final class ResourceManager {
 					}
 					res.release();
 					ref.clear();
+
+					// shutdownが呼ばれた後に全てのリソースが解放されたら終了
+					if (shutdown && refs.size() == 0) {
+						state = ResourceManager.State.SHUTDOWN;
+						break;
+					}
+
 				} catch (InterruptedException e) {
-					break;
 				}
 			}
 		}

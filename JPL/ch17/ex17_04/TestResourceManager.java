@@ -61,6 +61,45 @@ public class TestResourceManager extends TestCase {
 		}
 		rm.shutdown();
 	}
+
+	@Test
+	public void testShutdown() {
+		Key key1 = new Key();
+		Key key2 = new Key();
+		ResourceManager rm = new ResourceManager();
+		Resource r1 = rm.getResource(key1.getKey());
+		Resource r2 = rm.getResource(key2.getKey());
+		r1.use(key1.getKey(), new Object[0]);
+		r2.use(key2.getKey(), new Object[0]);
+		rm.shutdown();
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		assertEquals(rm.getState(), ResourceManager.State.RUN); // まだ生きてる
+
+		// r1を解放
+		key1 = null;
+		System.gc();
+		try {
+			Thread.sleep(100); // 刈り取りスレッドが実行されるのを待機
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		assertEquals(rm.getState(), ResourceManager.State.RUN); // まだ生きてる
+
+		// r2を解放
+		key2 = null;
+		System.gc();
+		try {
+			Thread.sleep(100); // 刈り取りスレッドが実行されるのを待機
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		assertEquals(rm.getState(), ResourceManager.State.SHUTDOWN); // 終了
+
+	}
 }
 
 /**

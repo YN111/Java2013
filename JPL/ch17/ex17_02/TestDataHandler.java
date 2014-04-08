@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-public class TestDataHolder extends TestCase {
+public class TestDataHandler extends TestCase {
 
 	@Before
 	public void setUp() {
@@ -29,7 +29,7 @@ public class TestDataHolder extends TestCase {
 
 	@Test
 	public void testReadFile() {
-		DataHolder dh = new DataHolder();
+		DataHandler dh = new DataHandler();
 		WeakReference<File> wr;
 		byte[] b;
 
@@ -49,7 +49,7 @@ public class TestDataHolder extends TestCase {
 	}
 
 	@SuppressWarnings("unchecked")
-	private WeakReference<File> getLastFileReference(DataHolder dh) {
+	private WeakReference<File> getLastFileReference(DataHandler dh) {
 		Field f = null;
 		try {
 			f = dh.getClass().getDeclaredField("lastFile");

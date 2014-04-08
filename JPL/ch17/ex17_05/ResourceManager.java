@@ -1,36 +1,50 @@
 import java.lang.ref.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
+/**
+ * リソースを管理するクラスです。<br>
+ * getResourceメソッドでリソースを取得できます。最初にリソースを取得する際に、任意のキーを設定する必要があります。<br>
+ * このキーを用いて再びgetResourceメソッドを呼ぶと、初回と同じResourceオブジェクトを取得できます。<br>
+ * また、getResourceメソッドでは、既に設定されているキーオブジェクトが到達可能か確認します。<br>
+ * 到達不可能なキーオブジェクトが存在した場合は、対応するリソースを回収します。<br>
+ * shutdownメソッドでは、キーの到達可否に関わらず、全てのリソースを回収します。
+ */
 public final class ResourceManager {
 
 	final ReferenceQueue<Object> queue;
 	final Map<Reference<?>, Resource> refs;
-	final Thread reaper;
 	boolean shutdown = false;
 
 	public ResourceManager() {
 		queue = new ReferenceQueue<Object>();
 		refs = new HashMap<Reference<?>, Resource>();
-		reaper = new ReaperThread();
-		reaper.start();
 
 		// リソースの初期化
-		
+
 	}
 
 	/**
-	 * ResourceManagerを終了します
+	 * 全てのリソースを解放します
 	 */
 	public synchronized void shutdown() {
 		if (!shutdown) {
 			shutdown = true;
-			reaper.interrupt();
+
+			Set<Reference<?>> keySet = refs.keySet();
+			for (Reference<?> ref : keySet) {
+				Resource res = (Resource) refs.get(ref);
+				res.release();
+			}
+			refs.clear();
 		}
 	}
 
 	/**
-	 * リソースを取得します
+	 * リソースを取得するメソッドです<br>
+	 * キーが既に設定されている場合は、対応するリソースオブジェクトを返します<br>
+	 * キーが到達不可能になったリソースがあれば解放します
 	 * @param key 取得用のキー
 	 * @return
 	 */
@@ -39,6 +53,8 @@ public final class ResourceManager {
 			throw new IllegalStateException();
 		}
 
+		pollQueue(); // 不要なリソースを解放
+
 		Resource res = new ResourceImpl(key);
 		Reference<?> ref = new PhantomReference<Object>(key, queue);
 		refs.put(ref, res);
@@ -46,24 +62,18 @@ public final class ResourceManager {
 	}
 
 	/**
-	 * 刈り取りスレッド
+	 * キーが到達不可能になったリソースがあれば解放します
 	 */
-	class ReaperThread extends Thread {
-		public void run() {
-			while (true) {
-				try {
-					Reference<?> ref = queue.remove();
-					Resource res = null;
-					synchronized (ResourceManager.this) {
-						res = refs.get(ref);
-						refs.remove(ref);
-					}
-					res.release();
-					ref.clear();
-				} catch (InterruptedException e) {
-					break;
-				}
+	private void pollQueue() {
+		Reference<?> garbageRef;
+		while ((garbageRef = queue.poll()) != null) {
+			Resource res = null;
+			synchronized (ResourceManager.this) {
+				res = refs.get(garbageRef);
+				refs.remove(garbageRef);
 			}
+			res.release();
+			garbageRef.clear();
 		}
 	}
 

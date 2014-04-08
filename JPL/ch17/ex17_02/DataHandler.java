@@ -1,7 +1,7 @@
 import java.io.*;
 import java.lang.ref.*;
 
-public class DataHolder {
+public class DataHandler {
 	private WeakReference<File> lastFile;
 	private WeakReference<byte[]> lastData;
 
