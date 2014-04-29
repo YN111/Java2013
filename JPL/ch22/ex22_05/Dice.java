@@ -40,10 +40,10 @@ public class Dice {
 	}
 
 	public static void main(String[] args) {
-		int times = 2;
+		int diceNum = 2;
 
-		double[] result = shake(times);
-		for (int i = times - 1; i < result.length; i++) {
+		double[] result = shake(diceNum);
+		for (int i = diceNum - 1; i < result.length; i++) {
 			System.out.println((i + 1) + ": " + result[i]);
 		}
 	}
