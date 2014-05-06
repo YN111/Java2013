@@ -2,7 +2,6 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class StringSplitter {
 
@@ -14,13 +13,12 @@ public class StringSplitter {
 	public static List<String> split(Reader source) {
 		List<String> list = new ArrayList<String>();
 		Scanner in = new Scanner(source);
-		Pattern COMMENT = Pattern.compile("#.*");
+		in.useDelimiter(in.delimiter().toString() + "|#.*"); // デリミタにコメント文字を追加
 
 		while (in.hasNext()) {
-			if (in.hasNext(COMMENT)) {
-				in.nextLine(); // コメントを読み飛ばす
-			} else {
-				list.add(in.next());
+			String next = in.next();
+			if (!next.equals("")) {
+				list.add(next);
 			}
 		}
 
