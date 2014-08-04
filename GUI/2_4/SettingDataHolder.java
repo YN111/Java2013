@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 
@@ -26,7 +27,7 @@ public class SettingDataHolder {
 	private Image mPicture; // 背景画像のオブジェクト
 	private Image mDefaultPicture; // デフォルト背景画像のオブジェクト
 	private String mPictureFilePath; // 背景画像のファイルパス
-	private String mDefaultPictureFilePath; // デフォルト背景画像のファイルパス
+	private boolean mDefaultPictureFlag; // デフォルト背景画像フラグ
 
 	// 表示位置に関する設定値を格納するフィールド
 	private int mGuiWidth; // GUIの幅
@@ -56,17 +57,7 @@ public class SettingDataHolder {
 	 */
 	public SettingDataHolder() {
 		// デフォルト背景画像の設定
-		mDefaultPictureFilePath = getClass().getClassLoader().getResource("picture.jpg").getPath();
-		ImageIcon icon;
-		try {
-			icon = new ImageIcon(mDefaultPictureFilePath);
-			mDefaultPicture = icon.getImage();
-		} catch (NullPointerException e) {
-			// ファイルが見つからなかった
-			// 背景画像なしで時計が表示される
-		}
-		mPicture = mDefaultPicture;
-		mPictureFilePath = mDefaultPictureFilePath;
+		resetPicture();
 	}
 
 	/**
@@ -84,7 +75,9 @@ public class SettingDataHolder {
 		mBackgroundColor = Color.BLACK; // 背景色
 		mRainbowFlg = false; // 虹色設定の場合にtrueになる
 		mPictureFlg = true; // 背景に画像を利用する場合にtrueになる
+		mPictureFilePath = "";
 		mPicture = mDefaultPicture;
+		mDefaultPictureFlag = true;
 	}
 
 	/**
@@ -150,11 +143,19 @@ public class SettingDataHolder {
 	public void setPictureFlg(boolean flg) {
 		mPictureFlg = flg;
 	}
+	
+	/**
+	 * デフォルト背景画像利用フラグのセッタ
+	 */
+	public void setDefaultPictureFlg(boolean flg) {
+		mDefaultPictureFlag = flg;
+	}
 
 	/**
 	 * 背景画像のセッタ
 	 */
 	public void setPicture(Image picture) {
+		mDefaultPictureFlag = false;
 		mPicture = picture;
 	}
 
@@ -170,7 +171,16 @@ public class SettingDataHolder {
 	 */
 	public void resetPicture() {
 		mPicture = mDefaultPicture;
-		mPictureFilePath = mDefaultPictureFilePath;
+		mDefaultPictureFlag = true;
+		URL url = getClass().getClassLoader().getResource("picture.jpg");
+		ImageIcon icon;
+		try {
+			icon = new ImageIcon(url);
+			mDefaultPicture = icon.getImage();
+		} catch (NullPointerException e) {
+			// ファイルが見つからなかった
+			// 背景画像なしで時計が表示される
+		}
 	}
 
 	/**
@@ -262,6 +272,13 @@ public class SettingDataHolder {
 	 */
 	public boolean isPicture() {
 		return mPictureFlg;
+	}
+	
+	/**
+	 * デフォルト背景画像利用フラグのゲッタ
+	 */
+	public boolean isDefaultPicture() {
+		return mDefaultPictureFlag;
 	}
 
 	/**

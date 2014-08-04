@@ -27,6 +27,7 @@ public class ClockFrame extends JFrame {
 	private static final String KEY_PICTURE_FLAG = "key_picture_flg";
 	private static final String KEY_BACKGROUND_COLOR = "key_bg_clr";
 	private static final String KEY_PICTURE_PATH = "key_bg_pict_path";
+	private static final String KEY_DEFAULT_PICT_FLAG = "key_bg_pict_def_flg";
 	private static final String KEY_FONT_TYPE_INDEX = "key_fnt_tp_idx";
 	private static final String KEY_FONT_STYLE_INDEX = "key_fnt_stl_idx";
 	private static final String KEY_FONT_SIZE_INDEX = "key_fnt_sz_idx";
@@ -102,14 +103,6 @@ public class ClockFrame extends JFrame {
 	 * 保存されていた値を読み出して設定します
 	 */
 	private void restoreSettingValue() {
-		// ダイアログ上の設定項目の選択中インデックスを復元
-		mPropertyDialog.setFontTypeSelectedIndex(prefs.getInt(KEY_FONT_TYPE_INDEX, 1));
-		mPropertyDialog.setFontStyleSelectedIndex(prefs.getInt(KEY_FONT_STYLE_INDEX, 0));
-		mPropertyDialog.setFontSizeSelectedIndex(prefs.getInt(KEY_FONT_SIZE_INDEX, 7));
-		mPropertyDialog.setFontColorSelectedIndex(prefs.getInt(KEY_FONT_COLOR_INDEX, 3));
-		mPropertyDialog.setAnalogColorSelectedIndex(prefs.getInt(KEY_ANALOG_COLOR_INDEX, 3));
-		mPropertyDialog.setBackgroundColorSelectedIndex(prefs.getInt(KEY_BACKGROUND_COLOR_INDEX, 0));
-
 		// 各属性の設定値を復元
 		String fontType = prefs.get(KEY_FONT_TYPE, null);
 		int fontStyle = prefs.getInt(KEY_FONT_STYLE, -1);
@@ -120,9 +113,11 @@ public class ClockFrame extends JFrame {
 		boolean pictureFlg = prefs.getBoolean(KEY_PICTURE_FLAG, true); // デフォルトは背景画像利用
 		String bgColor = prefs.get(KEY_BACKGROUND_COLOR, null);
 		String picturePath = prefs.get(KEY_PICTURE_PATH, null);
+		boolean defaultPictureFlg = prefs.getBoolean(KEY_DEFAULT_PICT_FLAG, true);
 
 		mDataHolder.setRainbowFlg(rainbowFlg);
 		mDataHolder.setPictureFlg(pictureFlg);
+		mDataHolder.setDefaultPictureFlg(defaultPictureFlg);
 
 		if (fontType != null) {
 			mDataHolder.setFontType(fontType);
@@ -149,9 +144,13 @@ public class ClockFrame extends JFrame {
 		}
 
 		if (mDataHolder.isPicture() && picturePath != null) {
-			mDataHolder.setPicturePath(picturePath);
-			ImageIcon icon = new ImageIcon(picturePath);
-			mDataHolder.setPicture(icon.getImage());
+			if (mDataHolder.isDefaultPicture()) {
+				mDataHolder.resetPicture();
+			} else {
+				mDataHolder.setPicturePath(picturePath);
+				ImageIcon icon = new ImageIcon(picturePath);
+				mDataHolder.setPicture(icon.getImage());
+			}
 		}
 
 		// 表示位置を復元
@@ -160,6 +159,48 @@ public class ClockFrame extends JFrame {
 		int defaultX = displayMode.getWidth() / 2 - DEFAULT_GUI_WIDTH / 2;
 		int defaultY = displayMode.getHeight() / 2 - DEFAULT_GUI_HEIGHT / 2;
 		setLocation(prefs.getInt(KEY_LOCTION_X, defaultX), prefs.getInt(KEY_LOCTION_Y, defaultY));
+	}
+
+	/**
+	 * prefsに保存されていたフォントタイプのインデックスを返します。
+	 */
+	int getFontTypeRestoredIndex() {
+		return prefs.getInt(KEY_FONT_TYPE_INDEX, 1);
+	}
+
+	/**
+	 * prefsに保存されていたフォントスタイルのインデックスを返します。
+	 */
+	int getFontStyleRestoredIndex() {
+		return prefs.getInt(KEY_FONT_STYLE_INDEX, 0);
+	}
+
+	/**
+	 * prefsに保存されていたフォントサイズのインデックスを返します。
+	 */
+	int getFontSizeRestoredIndex() {
+		return prefs.getInt(KEY_FONT_SIZE_INDEX, 7);
+	}
+
+	/**
+	 * prefsに保存されていた文字色のインデックスを返します。
+	 */
+	int getFontColorRestoredIndex() {
+		return prefs.getInt(KEY_FONT_COLOR_INDEX, 3);
+	}
+
+	/**
+	 * prefsに保存されていたアナログ時計色のインデックスを返します。
+	 */
+	int getAnalogColorRestoredIndex() {
+		return prefs.getInt(KEY_ANALOG_COLOR_INDEX, 3);
+	}
+
+	/**
+	 * prefsに保存されていた背景色のインデックスを返します。
+	 */
+	int getBackgroundColorRestoredIndex() {
+		return prefs.getInt(KEY_BACKGROUND_COLOR_INDEX, 0);
 	}
 
 	/**
@@ -203,6 +244,12 @@ public class ClockFrame extends JFrame {
 
 			// ダイアログの初期化
 			mPropertyDialog.setVisible(false);
+			prefs.putInt(KEY_FONT_TYPE_INDEX, 1);
+			prefs.putInt(KEY_FONT_STYLE_INDEX, 0);
+			prefs.putInt(KEY_FONT_SIZE_INDEX, 7);
+			prefs.putInt(KEY_FONT_COLOR_INDEX, 3);
+			prefs.putInt(KEY_ANALOG_COLOR_INDEX, 3);
+			prefs.putInt(KEY_BACKGROUND_COLOR_INDEX, 0);
 			mPropertyDialog = new PropertyDialog(ClockFrame.this, mDataHolder);
 		}
 	}
@@ -226,6 +273,8 @@ public class ClockFrame extends JFrame {
 			prefs.put(KEY_ANALOG_COLOR, ColorUtil.convertColorToString(mDataHolder.getAnalogColor()));
 			prefs.putBoolean(KEY_PICTURE_FLAG, mDataHolder.isPicture());
 			prefs.put(KEY_BACKGROUND_COLOR, ColorUtil.convertColorToString(mDataHolder.getBackgroundColor()));
+			prefs.putBoolean(KEY_DEFAULT_PICT_FLAG, mDataHolder.isDefaultPicture());
+
 			String picturePath = mDataHolder.getPicturePath();
 			if (picturePath != null) {
 				prefs.put(KEY_PICTURE_PATH, picturePath);

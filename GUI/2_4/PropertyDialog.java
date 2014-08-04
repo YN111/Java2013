@@ -54,6 +54,7 @@ public class PropertyDialog extends JDialog {
 	private Font mTextFont = new Font(Font.SANS_SERIF, Font.PLAIN, 13); // 文字列のフォント
 	private Dimension mListSize = new Dimension(130, 25);
 	private boolean mFileChooserLockFlag = false; // このフラグがtrueの間はファイル選択画面を表示しない
+	private boolean mInitFlag = false;
 
 	// 各属性の初期値（キャンセルボタンが押されたときに戻す値）
 	private String mOriginFontType;
@@ -63,6 +64,8 @@ public class PropertyDialog extends JDialog {
 	private Color mOriginFontColor;
 	private Color mOriginAnalogColor;
 	private boolean mOriginPictureFlag;
+	private boolean mOriginDefaultPictureFlag;
+	private String mOriginPicturePath;
 	private Color mOriginBackgroundColor;
 
 	// 各属性の初期値のインデックス（キャンセルボタンが押されたときに戻す値）
@@ -80,34 +83,63 @@ public class PropertyDialog extends JDialog {
 		setResizable(false); // サイズ変更不可
 		setSize(300, 300);
 		setTitle("Clock - プロパティ");
+		repaint(); // paintメソッドを呼び出す
+	}
 
-		GridBagLayout gbl = new GridBagLayout();
-		setLayout(gbl);
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.insets = new Insets(5, 5, 5, 5);
+	@Override
+	public void paint(Graphics g) {
+		if (mFontTypeList == null) {
+			// 初回のみ
+			mFileChooserLockFlag = true;
+			mInitFlag = true;
+			GridBagLayout gbl = new GridBagLayout();
+			setLayout(gbl);
+			GridBagConstraints gbc = new GridBagConstraints();
+			gbc.insets = new Insets(5, 5, 5, 5);
 
-		// 各リストの初期化
-		mFontTypeList = createFontTypeList();
-		mFontStyleList = createFontStyleList();
-		mFontSizeList = createFontSizeList();
-		mFontColorList = createFontColorList();
-		mAnalogColorList = createAnalogColorList();
-		mBackgroundColorList = createBackgroundColorList();
+			// 各リストの初期化
+			mFontTypeList = createFontTypeList();
+			mFontStyleList = createFontStyleList();
+			mFontSizeList = createFontSizeList();
+			mFontColorList = createFontColorList(g);
+			mAnalogColorList = createAnalogColorList(g);
+			mBackgroundColorList = createBackgroundColorList(g);
 
-		// 各要素を追加
-		addLabel(0, 0, "フォント", gbl, gbc);
-		addList(1, 0, mFontTypeList, gbl, gbc);
-		addLabel(0, 1, "スタイル", gbl, gbc);
-		addList(1, 1, mFontStyleList, gbl, gbc);
-		addLabel(0, 2, "サイズ", gbl, gbc);
-		addList(1, 2, mFontSizeList, gbl, gbc);
-		addLabel(0, 3, "文字色", gbl, gbc);
-		addList(1, 3, mFontColorList, gbl, gbc);
-		addLabel(0, 4, "アナログ時計色", gbl, gbc);
-		addList(1, 4, mAnalogColorList, gbl, gbc);
-		addLabel(0, 5, "背景色", gbl, gbc);
-		addList(1, 5, mBackgroundColorList, gbl, gbc);
-		addButton(0, 6, gbl, gbc);
+			// 各要素を追加
+			addLabel(0, 0, "フォント", gbl, gbc);
+			addList(1, 0, mFontTypeList, gbl, gbc);
+			addLabel(0, 1, "スタイル", gbl, gbc);
+			addList(1, 1, mFontStyleList, gbl, gbc);
+			addLabel(0, 2, "サイズ", gbl, gbc);
+			addList(1, 2, mFontSizeList, gbl, gbc);
+			addLabel(0, 3, "文字色", gbl, gbc);
+			addList(1, 3, mFontColorList, gbl, gbc);
+			addLabel(0, 4, "アナログ時計色", gbl, gbc);
+			addList(1, 4, mAnalogColorList, gbl, gbc);
+			addLabel(0, 5, "背景色", gbl, gbc);
+			addList(1, 5, mBackgroundColorList, gbl, gbc);
+			addButton(0, 6, gbl, gbc);
+
+			// インデックスを初期値（前回終了時の値）に設定
+			mFontTypeList.setSelectedIndex(mOwner.getFontTypeRestoredIndex());
+			mFontStyleList.setSelectedIndex(mOwner.getFontStyleRestoredIndex());
+			mFontSizeList.setSelectedIndex(mOwner.getFontSizeRestoredIndex());
+			mFontColorList.setSelectedIndex(mOwner.getFontColorRestoredIndex());
+			mAnalogColorList.setSelectedIndex(mOwner.getAnalogColorRestoredIndex());
+			mBackgroundColorList.setSelectedIndex(mOwner.getBackgroundColorRestoredIndex());
+
+			// 選択中のインデックスを保持
+			mOriginFontTypeIndex = mFontTypeList.getSelectedIndex();
+			mOriginFontStyleIndex = mFontStyleList.getSelectedIndex();
+			mOriginFontSizeIndex = mFontSizeList.getSelectedIndex();
+			mOriginFontColorIndex = mFontColorList.getSelectedIndex();
+			mOriginAnalogColorIndex = mAnalogColorList.getSelectedIndex();
+			mOriginBackgroundColorIndex = mBackgroundColorList.getSelectedIndex();
+
+			setVisible(true);
+			mFileChooserLockFlag = false;
+			mInitFlag = false;
+		}
 	}
 
 	@Override
@@ -121,20 +153,23 @@ public class PropertyDialog extends JDialog {
 			mOriginFontColor = mDataHolder.getFontColor();
 			mOriginAnalogColor = mDataHolder.getAnalogColor();
 			mOriginPictureFlag = mDataHolder.isPicture();
+			mOriginDefaultPictureFlag = mDataHolder.isDefaultPicture();
+			mOriginPicturePath = mDataHolder.getPicturePath();
 			mOriginBackgroundColor = mDataHolder.getBackgroundColor();
 
 			// 各設定項目のインデックス初期値を保持する
-			mOriginFontTypeIndex = mFontTypeList.getSelectedIndex();
-			mOriginFontStyleIndex = mFontStyleList.getSelectedIndex();
-			mOriginFontSizeIndex = mFontSizeList.getSelectedIndex();
-			mOriginFontColorIndex = mFontColorList.getSelectedIndex();
-			mOriginAnalogColorIndex = mAnalogColorList.getSelectedIndex();
-			mOriginBackgroundColorIndex = mBackgroundColorList.getSelectedIndex();
+			if (mFontTypeList != null) {
+				mOriginFontTypeIndex = mFontTypeList.getSelectedIndex();
+				mOriginFontStyleIndex = mFontStyleList.getSelectedIndex();
+				mOriginFontSizeIndex = mFontSizeList.getSelectedIndex();
+				mOriginFontColorIndex = mFontColorList.getSelectedIndex();
+				mOriginAnalogColorIndex = mAnalogColorList.getSelectedIndex();
+				mOriginBackgroundColorIndex = mBackgroundColorList.getSelectedIndex();
+			}
 
 			// 表示位置
 			setLocation(mOwner.getX() + 20, mOwner.getY() + 20);
 		}
-
 		super.setVisible(b);
 	}
 
@@ -178,10 +213,10 @@ public class PropertyDialog extends JDialog {
 	/**
 	 * 文字色の設定項目リストを生成します
 	 */
-	private JComboBox createFontColorList() {
+	private JComboBox createFontColorList(Graphics g) {
 		String[] items = { COLOR_WHITE, COLOR_BLACK, COLOR_GRAY, COLOR_RED, COLOR_BLUE, COLOR_YELLOW, COLOR_GREEN,
 				COLOR_PINK, COLOR_CYAN, COLOR_RAINBOW };
-		JComboBox cb = new JComboBox(items);
+		JComboBox cb = createColorComboBox(items, g);
 		cb.setSelectedIndex(3);
 		cb.setPreferredSize(mListSize);
 		cb.addActionListener(new FontColorListener());
@@ -191,10 +226,10 @@ public class PropertyDialog extends JDialog {
 	/**
 	 * アナログ時計色の設定項目リストを生成します
 	 */
-	private JComboBox createAnalogColorList() {
+	private JComboBox createAnalogColorList(Graphics g) {
 		String[] items = { COLOR_WHITE, COLOR_BLACK, COLOR_GRAY, COLOR_RED, COLOR_BLUE, COLOR_YELLOW, COLOR_GREEN,
 				COLOR_PINK, COLOR_CYAN };
-		JComboBox cb = new JComboBox(items);
+		JComboBox cb = createColorComboBox(items, g);
 		cb.setSelectedIndex(3);
 		cb.setPreferredSize(mListSize);
 		cb.addActionListener(new AnalogColorListener());
@@ -204,13 +239,31 @@ public class PropertyDialog extends JDialog {
 	/**
 	 * 背景色の設定項目リストを生成します
 	 */
-	private JComboBox createBackgroundColorList() {
+	private JComboBox createBackgroundColorList(Graphics g) {
 		String[] items = { DEFAULT_PICTURE, SELECT_PICTURE, COLOR_WHITE, COLOR_BLACK, COLOR_GRAY, COLOR_RED,
 				COLOR_BLUE, COLOR_YELLOW, COLOR_GREEN, COLOR_PINK, COLOR_CYAN };
-		JComboBox cb = new JComboBox(items);
+		JComboBox cb = createColorComboBox(items, g);
 		cb.setSelectedIndex(0);
 		cb.setPreferredSize(mListSize);
 		cb.addActionListener(new BackgroundColorListener());
+		return cb;
+	}
+
+	/**
+	 * カラーチップを含んだComboBoxを生成して返します
+	 * @param items 色のリスト
+	 * @param g グラフィックスオブジェクト
+	 */
+	private JComboBox createColorComboBox(String[] items, Graphics g) {
+		DefaultComboBoxModel model = new DefaultComboBoxModel();
+		for (String item : items) {
+			ColorIcon icon = new ColorIcon(ColorUtil.convertStringToColor(item));
+			icon.paintIcon(this, g, 10, 10);
+			model.addElement(new ColorTipLabelElement(item, icon));
+		}
+		JComboBox cb = new JComboBox(model);
+		ListCellRenderer renderer = new ColorTipCellRenderer();
+		cb.setRenderer(renderer);
 		return cb;
 	}
 
@@ -336,7 +389,8 @@ public class PropertyDialog extends JDialog {
 	private class FontColorListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String selected = ((JComboBox) e.getSource()).getSelectedItem().toString();
+			JComboBox selectedBox = (JComboBox) e.getSource();
+			String selected = ((ColorTipLabelElement) selectedBox.getSelectedItem()).getText();
 			mDataHolder.setRainbowFlg(false); // 虹色フラグを一旦解除する
 			if (selected.equals(COLOR_WHITE)) {
 				mDataHolder.setFontColor(Color.WHITE);
@@ -368,7 +422,8 @@ public class PropertyDialog extends JDialog {
 	private class AnalogColorListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String selected = ((JComboBox) e.getSource()).getSelectedItem().toString();
+			JComboBox selectedBox = (JComboBox) e.getSource();
+			String selected = ((ColorTipLabelElement) selectedBox.getSelectedItem()).getText();
 			if (selected.equals(COLOR_WHITE)) {
 				mDataHolder.setAnalogColor(Color.WHITE);
 			} else if (selected.equals(COLOR_BLACK)) {
@@ -397,7 +452,12 @@ public class PropertyDialog extends JDialog {
 	private class BackgroundColorListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String selected = ((JComboBox) e.getSource()).getSelectedItem().toString();
+			if (mInitFlag) {
+				return;
+			}
+
+			JComboBox selectedBox = (JComboBox) e.getSource();
+			String selected = ((ColorTipLabelElement) selectedBox.getSelectedItem()).getText();
 			mDataHolder.setPictureFlg(false); // 背景画像フラグを一旦解除
 			if (selected.equals(DEFAULT_PICTURE)) {
 				mDataHolder.setPictureFlg(true);
@@ -461,6 +521,16 @@ public class PropertyDialog extends JDialog {
 	private class CancelButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			// 選択中インデックスを元の値に戻す
+			mFontTypeList.setSelectedIndex(mOriginFontTypeIndex);
+			mFontStyleList.setSelectedIndex(mOriginFontStyleIndex);
+			mFontSizeList.setSelectedIndex(mOriginFontSizeIndex);
+			mFontColorList.setSelectedIndex(mOriginFontColorIndex);
+			mAnalogColorList.setSelectedIndex(mOriginAnalogColorIndex);
+			mFileChooserLockFlag = true;
+			mBackgroundColorList.setSelectedIndex(mOriginBackgroundColorIndex);
+			mFileChooserLockFlag = false;
+
 			// 各設定値を元の値に戻す
 			mDataHolder.setFontType(mOriginFontType);
 			mDataHolder.setFontStyle(mOriginFontStyle);
@@ -469,105 +539,156 @@ public class PropertyDialog extends JDialog {
 			mDataHolder.setFontColor(mOriginFontColor);
 			mDataHolder.setAnalogColor(mOriginAnalogColor);
 			mDataHolder.setPictureFlg(mOriginPictureFlag);
+			mDataHolder.setDefaultPictureFlg(mOriginDefaultPictureFlag);
+			mDataHolder.setPicturePath(mOriginPicturePath);
+			if (mDataHolder.isPicture()) {
+				if (mDataHolder.isDefaultPicture()) {
+					mDataHolder.resetPicture();
+				} else {
+					// 画像を復元
+					ImageIcon icon;
+					try {
+						icon = new ImageIcon(mOriginPicturePath);
+						mDataHolder.setPicture(icon.getImage());
+					} catch (NullPointerException e2) {
+						// ファイルが見つからなかった
+						// 背景画像なしで時計が表示される
+					}
+				}
+			}
 			mDataHolder.setBackgroundColor(mOriginBackgroundColor);
-
-			// 選択中インデックスを元の値に戻す
-			mFontTypeList.setSelectedIndex(mOriginFontTypeIndex);
-			mFontStyleList.setSelectedIndex(mOriginFontStyleIndex);
-			mFontSizeList.setSelectedIndex(mOriginFontSizeIndex);
-			mFontColorList.setSelectedIndex(mOriginFontColorIndex);
-			mAnalogColorList.setSelectedIndex(mOriginAnalogColorIndex);
-			mBackgroundColorList.setSelectedIndex(mOriginBackgroundColorIndex);
 
 			setVisible(false);
 		}
 	}
 
 	/**
-	 * フォントタイプの選択中インデックスのセッタ
+	 * 単色のカラーアイコンを定義するクラスです。
 	 */
-	public void setFontTypeSelectedIndex(int index) {
-		mFontTypeList.setSelectedIndex(index);
+	private class ColorIcon implements Icon {
+		Color color;
+
+		ColorIcon(Color color) {
+			this.color = color;
+		}
+
+		@Override
+		public int getIconHeight() {
+			return 10;
+		}
+
+		@Override
+		public int getIconWidth() {
+			return 10;
+		}
+
+		@Override
+		public void paintIcon(Component c, Graphics g, int x, int y) {
+			g.setColor(color);
+			g.fillRect(x, y, 10, 10);
+		}
 	}
 
 	/**
-	 * フォントスタイルの選択中インデックスのセッタ
+	 * カラーチップ付きラベルの要素を定義するクラスです。
 	 */
-	public void setFontStyleSelectedIndex(int index) {
-		mFontStyleList.setSelectedIndex(index);
+	private class ColorTipLabelElement {
+		String text;
+		Icon icon;
+
+		ColorTipLabelElement(String text, Icon icon) {
+			this.text = text;
+			this.icon = icon;
+		}
+
+		public String getText() {
+			return text;
+		}
+
+		public Icon getIcon() {
+			return icon;
+		}
 	}
 
 	/**
-	 * フォントサイズの選択中インデックスのセッタ
+	 * カラーチップを含むラベルを定義するクラスです。
 	 */
-	public void setFontSizeSelectedIndex(int index) {
-		mFontSizeList.setSelectedIndex(index);
-	}
+	private class ColorTipCellRenderer extends JLabel implements ListCellRenderer {
+		private static final long serialVersionUID = -3705819823593802869L;
 
-	/**
-	 * 文字色の選択中インデックスのセッタ
-	 */
-	public void setFontColorSelectedIndex(int index) {
-		mFontColorList.setSelectedIndex(index);
-	}
-
-	/**
-	 * アナログ時計色の選択中インデックスのセッタ
-	 */
-	public void setAnalogColorSelectedIndex(int index) {
-		mAnalogColorList.setSelectedIndex(index);
-	}
-
-	/**
-	 * 背景色の選択中インデックスのセッタ
-	 */
-	public void setBackgroundColorSelectedIndex(int index) {
-		// このメソッドはPreferenceに保持されていた値を復元するときに呼ばれる
-		// 画像ファイルのパスもPreferenceに保持しているため、再選択は不要
-		mFileChooserLockFlag = true;
-		mBackgroundColorList.setSelectedIndex(index);
-		mFileChooserLockFlag = false;
+		@Override
+		public Component getListCellRendererComponent(JList list, Object obj, int index, boolean isSelected,
+				boolean cellHasFocus) {
+			ColorTipLabelElement colorTip = (ColorTipLabelElement) obj;
+			setText(colorTip.getText());
+			setIcon(colorTip.getIcon());
+			return this;
+		}
 	}
 
 	/**
 	 * フォントタイプの選択中インデックスのゲッタ
 	 */
 	public int getFontTypeSelectedIndex() {
-		return mFontTypeList.getSelectedIndex();
+		if (mFontTypeList != null) {
+			return mFontTypeList.getSelectedIndex();
+		} else {
+			return mOwner.getFontTypeRestoredIndex();
+		}
 	}
 
 	/**
 	 * フォントスタイルの選択中インデックスのゲッタ
 	 */
 	public int getFontStyleSelectedIndex() {
-		return mFontStyleList.getSelectedIndex();
+		if (mFontStyleList != null) {
+			return mFontStyleList.getSelectedIndex();
+		} else {
+			return mOwner.getFontStyleRestoredIndex();
+		}
 	}
 
 	/**
 	 * フォントサイズの選択中インデックスのゲッタ
 	 */
 	public int getFontSizeSelectedIndex() {
-		return mFontSizeList.getSelectedIndex();
+		if (mFontSizeList != null) {
+			return mFontSizeList.getSelectedIndex();
+		} else {
+			return mOwner.getFontSizeRestoredIndex();
+		}
 	}
 
 	/**
 	 * 文字色の選択中インデックスのゲッタ
 	 */
 	public int getFontColorSelectedIndex() {
-		return mFontColorList.getSelectedIndex();
+		if (mFontColorList != null) {
+			return mFontColorList.getSelectedIndex();
+		} else {
+			return mOwner.getFontColorRestoredIndex();
+		}
 	}
 
 	/**
 	 * アナログ時計色の選択中インデックスのゲッタ
 	 */
 	public int getAnalogColorSelectedIndex() {
-		return mAnalogColorList.getSelectedIndex();
+		if (mAnalogColorList != null) {
+			return mAnalogColorList.getSelectedIndex();
+		} else {
+			return mOwner.getAnalogColorRestoredIndex();
+		}
 	}
 
 	/**
 	 * 背景色の選択中インデックスのゲッタ
 	 */
 	public int getBackgroundColorSelectedIndex() {
-		return mBackgroundColorList.getSelectedIndex();
+		if (mBackgroundColorList != null) {
+			return mBackgroundColorList.getSelectedIndex();
+		} else {
+			return mOwner.getBackgroundColorRestoredIndex();
+		}
 	}
 }

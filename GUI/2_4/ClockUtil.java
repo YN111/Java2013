@@ -1,7 +1,7 @@
 import java.util.Calendar;
 
 public class ClockUtil {
-	
+
 	/**
 	 * 現在の日付を文字列として取得します
 	 */
@@ -14,10 +14,10 @@ public class ClockUtil {
 		builder.append("/");
 		builder.append(cal.get(Calendar.DATE));
 		builder.append("　");
-		
+
 		// 曜日
 		int week = cal.get(Calendar.DAY_OF_WEEK);
-		switch(week) {
+		switch (week) {
 		case 1:
 			builder.append("SUN");
 			break;
@@ -42,10 +42,10 @@ public class ClockUtil {
 		default:
 			builder.append("SUN");
 		}
-		
+
 		return builder.toString();
 	}
-	
+
 	/**
 	 * 現在の時刻を文字列として取得します
 	 */

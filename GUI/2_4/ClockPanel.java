@@ -33,10 +33,8 @@ public class ClockPanel extends JPanel {
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		drawBackground(g2); // 背景
-		drawText(g2, ClockUtil.getTime(), mDataHolder.getTimeFont(), mDataHolder.getTimeX(),
-				mDataHolder.getTimeY()); // 時刻
-		drawText(g2, ClockUtil.getDate(), mDataHolder.getDateFont(), mDataHolder.getDateX(),
-				mDataHolder.getDateY()); // 日付
+		drawText(g2, ClockUtil.getTime(), mDataHolder.getTimeFont(), mDataHolder.getTimeX(), mDataHolder.getTimeY()); // 時刻
+		drawText(g2, ClockUtil.getDate(), mDataHolder.getDateFont(), mDataHolder.getDateX(), mDataHolder.getDateY()); // 日付
 		drawAnalogClock(g2); // アナログ時計
 	}
 
@@ -97,8 +95,7 @@ public class ClockPanel extends JPanel {
 			// 虹色で文字列を描画
 			int timeY = mDataHolder.getTimeY();
 			int strHeight = mDataHolder.getStrHeight();
-			LinearGradientPaint gradient = new LinearGradientPaint(
-					new Point2D.Float(0, (int) (timeY * 1.1)),
+			LinearGradientPaint gradient = new LinearGradientPaint(new Point2D.Float(0, (int) (timeY * 1.1)),
 					new Point2D.Float((int) (strHeight * 0.4), (int) (timeY * 1.1) + (int) (strHeight * 0.4)),
 					RainbowUtil.DIST, RainbowUtil.COLORS, MultipleGradientPaint.CycleMethod.NO_CYCLE,
 					ColorSpaceType.LINEAR_RGB, RainbowUtil.getAffineTransform());
