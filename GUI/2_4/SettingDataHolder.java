@@ -143,7 +143,7 @@ public class SettingDataHolder {
 	public void setPictureFlg(boolean flg) {
 		mPictureFlg = flg;
 	}
-	
+
 	/**
 	 * デフォルト背景画像利用フラグのセッタ
 	 */
@@ -273,7 +273,7 @@ public class SettingDataHolder {
 	public boolean isPicture() {
 		return mPictureFlg;
 	}
-	
+
 	/**
 	 * デフォルト背景画像利用フラグのゲッタ
 	 */

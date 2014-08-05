@@ -118,6 +118,9 @@ public class ClockFrame extends JFrame {
 		mDataHolder.setRainbowFlg(rainbowFlg);
 		mDataHolder.setPictureFlg(pictureFlg);
 		mDataHolder.setDefaultPictureFlg(defaultPictureFlg);
+		if (defaultPictureFlg) {
+			mDataHolder.resetPicture();
+		}
 
 		if (fontType != null) {
 			mDataHolder.setFontType(fontType);

@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URL;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -52,7 +53,7 @@ public class PropertyDialog extends JDialog {
 	private JComboBox mAnalogColorList;
 	private JComboBox mBackgroundColorList;
 	private Font mTextFont = new Font(Font.SANS_SERIF, Font.PLAIN, 13); // 文字列のフォント
-	private Dimension mListSize = new Dimension(130, 25);
+	private Dimension mListSize = new Dimension(135, 25);
 	private boolean mFileChooserLockFlag = false; // このフラグがtrueの間はファイル選択画面を表示しない
 	private boolean mInitFlag = false;
 
@@ -257,8 +258,26 @@ public class PropertyDialog extends JDialog {
 	private JComboBox createColorComboBox(String[] items, Graphics g) {
 		DefaultComboBoxModel model = new DefaultComboBoxModel();
 		for (String item : items) {
-			ColorIcon icon = new ColorIcon(ColorUtil.convertStringToColor(item));
-			icon.paintIcon(this, g, 10, 10);
+			Icon icon = null;
+
+			// アイコン画像を表示
+			if (item.equals(DEFAULT_PICTURE) || item.equals(SELECT_PICTURE)) {
+				URL url = getClass().getClassLoader().getResource("file_icon.png");
+				if (url != null) {
+					icon = new ImageIcon(url);
+				}
+			} else if (item.equals(COLOR_RAINBOW)) {
+				URL url = getClass().getClassLoader().getResource("rainbow_icon.png");
+				if (url != null)
+					icon = new ImageIcon(url);
+			}
+
+			// 通常のカラーチップを表示
+			if (icon == null) {
+				icon = new ColorIcon(ColorUtil.convertStringToColor(item));
+				icon.paintIcon(this, g, 15, 15);
+			}
+
 			model.addElement(new ColorTipLabelElement(item, icon));
 		}
 		JComboBox cb = new JComboBox(model);
@@ -574,18 +593,18 @@ public class PropertyDialog extends JDialog {
 
 		@Override
 		public int getIconHeight() {
-			return 10;
+			return 12;
 		}
 
 		@Override
 		public int getIconWidth() {
-			return 10;
+			return 12;
 		}
 
 		@Override
 		public void paintIcon(Component c, Graphics g, int x, int y) {
 			g.setColor(color);
-			g.fillRect(x, y, 10, 10);
+			g.fillRect(x, y, 12, 12);
 		}
 	}
 
